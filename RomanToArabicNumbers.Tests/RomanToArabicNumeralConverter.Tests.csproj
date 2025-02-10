@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RomanToArabicNumbers\RomanToArabicNumbers.csproj" />
+    <ProjectReference Include="..\RomanToArabicNumbers\RomanToArabicNumeralConverter.csproj" />
   </ItemGroup>
 
   <ItemGroup>

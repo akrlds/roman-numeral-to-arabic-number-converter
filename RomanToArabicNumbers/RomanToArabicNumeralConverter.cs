@@ -1,26 +1,26 @@
-﻿namespace RomanToArabicNumbers
+﻿namespace RomanToArabicNumeralConverter
 {
-    public static class RomanToArabicConverter
+    public static class RomanToArabicNumeralConverter
     {
-        public static ResultDto<int> Convert(string? input)
+        public static Result<int> Convert(string? input)
         {
-            //Check null or empty
+            // Check null or empty
             if (String.IsNullOrEmpty(input))
             {
-                return new ResultDto<int>($"Invalid input: {input}");
+                return Result<int>.Failure($"Invalid input: {input}");
             }
 
             input = input.Trim().ToUpper();
 
-            //Check repetition validity
+            // Check repetition validity
             var checkRepetitionValidity = CheckRepetitionValidity(input);
 
             if (!checkRepetitionValidity.Status)
             {
-                return new ResultDto<int>($"{checkRepetitionValidity.Error}: {input}");
+                return Result<int>.Failure($"{checkRepetitionValidity.Error}: {input}");
             }
 
-            //Get numbers from the numeral
+            // Get numbers from the numeral
             var getNumbersList = GetNumbersFromNumeral(input);
 
             List<int>? numbers;
@@ -31,26 +31,26 @@
             }
             else
             {
-                return new ResultDto<int>($"{getNumbersList.Error}: {input}");
+                return Result<int>.Failure($"{getNumbersList.Error}: {input}");
             }
 
-            //Check subtraction validity
+            // Check subtraction validity
             var checkSubtractionValidity = CheckSubtractionValidity(numbers);
 
             if (!checkSubtractionValidity.Status)
             {
-                return new ResultDto<int>($"{checkSubtractionValidity.Error}: {input}");
+                return Result<int>.Failure($"{checkSubtractionValidity.Error}: {input}");
             }
 
-            //Get the total
+            // Get the total
             var getTotal = GetTotal(numbers);
 
             if (!getTotal.Status)
             {
-                return new ResultDto<int>($"{getTotal.Error}: {input}");
+                return Result<int>.Failure($"{getTotal.Error}: {input}");
             }
 
-            return new ResultDto<int>(getTotal.Data);
+            return Result<int>.Success(getTotal.Data);
         }
 
         private static Dictionary<char, int> RomanToArabicDictionary { get; } = new Dictionary<char, int> {
@@ -63,27 +63,27 @@
                         {'M', 1000},
                     };
 
-        private static ResultDto<bool> CheckRepetitionValidity(string romanNumber)
+        private static Result<bool> CheckRepetitionValidity(string romanNumber)
         {
-            //Check repetition validity
+            // Check repetition validity
             string[] invalidRepetitions = ["IIII", "XXXX", "CCCC", "MMMM", "VV", "LL", "DD"];
 
             if (invalidRepetitions.Any(romanNumber.Contains))
             {
-                return new ResultDto<bool>("Invalid repetitions found");
+                return Result<bool>.Failure("Invalid repetitions found");
             }
 
-            return new ResultDto<bool>(true);
+            return Result<bool>.Success(true);
         }
 
-        private static ResultDto<bool> CheckSubtractionValidity(List<int>? numbers)
+        private static Result<bool> CheckSubtractionValidity(List<int>? numbers)
         {
-            //Null check
+            // Null check
             if (numbers == null)
             {
-                return new ResultDto<bool>("Generic error");
+                return Result<bool>.Failure("Generic error");
             }
-            //Check subtraction validity
+            // Check subtraction validity
             for (int i = 0; i < numbers.Count - 1; i++)
             {
                 if (numbers[i] < numbers[i + 1] && // Potential subtraction
@@ -91,15 +91,15 @@
                       (numbers[i] == 10 && (numbers[i + 1] == 50 || numbers[i + 1] == 100)) ||
                       (numbers[i] == 100 && (numbers[i + 1] == 500 || numbers[i + 1] == 1000))))
                 {
-                    return new ResultDto<bool>("Invalid subtractions found");
+                    return Result<bool>.Failure("Invalid subtractions found");
                 }
             }
-            return new ResultDto<bool>(true);
+            return Result<bool>.Success(true);
         }
 
-        private static ResultDto<List<int>> GetNumbersFromNumeral(string input)
+        private static Result<List<int>> GetNumbersFromNumeral(string input)
         {
-            //Extract numbers from the numeral
+            // Extract numbers from the numeral
             var numbers = new List<int>();
 
             foreach (var character in input)
@@ -110,22 +110,22 @@
                 }
                 else
                 {
-                    return new ResultDto<List<int>>("Invalid characters found");
+                    return Result<List<int>>.Failure("Invalid characters found");
                 }
             }
 
-            return new ResultDto<List<int>>(numbers);
+            return Result<List<int>>.Success(numbers);
         }
 
-        private static ResultDto<int> GetTotal(List<int>? numbers)
+        private static Result<int> GetTotal(List<int>? numbers)
         {
-            //Null check
+            // Null check
             if (numbers == null)
             {
-                return new ResultDto<int>("Generic error");
+                return Result<int>.Failure("Generic error");
             }
 
-            //Get the total
+            // Get the total
             var total = 0;
 
             for (int i = 0; i < numbers.Count; i++)
@@ -133,7 +133,7 @@
                 if (i < numbers.Count - 1 && numbers[i] < numbers[i + 1])
                 {
                     total += numbers[i + 1] - numbers[i];
-                    i++;
+                    i++; // Skip next number since it is already counted in the subtraction
                 }
                 else
                 {
@@ -141,7 +141,7 @@
                 }
             }
 
-            return new ResultDto<int>(total);
+            return Result<int>.Success(total);
         }
     }
 }
