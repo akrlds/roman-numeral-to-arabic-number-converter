@@ -78,6 +78,7 @@
 
         private static ResultDto<bool> CheckSubtractionValidity(List<int>? numbers)
         {
+            //Null check
             if (numbers == null)
             {
                 return new ResultDto<bool>("Generic error");
@@ -118,12 +119,13 @@
 
         private static ResultDto<int> GetTotal(List<int>? numbers)
         {
-            //Get the total
+            //Null check
             if (numbers == null)
             {
                 return new ResultDto<int>("Generic error");
             }
 
+            //Get the total
             var total = 0;
 
             for (int i = 0; i < numbers.Count; i++)
