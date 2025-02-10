@@ -9,7 +9,7 @@ namespace RomanToArabicNumeralConverter
             while (true)
             {
                 // Read user input
-                Console.WriteLine("Enter a Roman numeral to convert to an Arabic numeral, or type \"exit\" to quit:");
+                Console.WriteLine("Enter a Roman numeral to convert to an Arabic one, or type \"exit\" to quit:");
 
                 var input = Console.ReadLine();
 
@@ -30,7 +30,7 @@ namespace RomanToArabicNumeralConverter
                 }
 
                 // Respond
-                Console.WriteLine($"The Arabic numberal for {input} is: {result.Data}");
+                Console.WriteLine($"The Arabic numeral for {input} is: {result.Data}");
             }
         }
     }
