@@ -21,7 +21,7 @@
             }
 
             //Get numbers from the numeral
-            var getNumbersList = GetNumbersFromNumberal(input);
+            var getNumbersList = GetNumbersFromNumeral(input);
 
             List<int>? numbers;
 
@@ -97,7 +97,7 @@
             return new ResultDto<bool>(true);
         }
 
-        private static ResultDto<List<int>> GetNumbersFromNumberal(string input)
+        private static ResultDto<List<int>> GetNumbersFromNumeral(string input)
         {
             //Extract numbers from the numeral
             var numbers = new List<int>();
