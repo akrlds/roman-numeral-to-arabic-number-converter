@@ -1,4 +1,4 @@
-﻿namespace RomanToArabicNumeralConverter
+﻿namespace RomanToArabicNumeralConverter.Common
 {
     public sealed class Result<T>
     {

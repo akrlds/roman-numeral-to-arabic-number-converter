@@ -1,27 +1,27 @@
-﻿namespace RomanToArabicNumeralConverter
+﻿namespace RomanToArabicNumeralConverter.Common
 {
-    public static class RomanToArabicNumeralConverter
+    public static class Converter
     {
-        public static Result<int> Convert(string? input)
+        public static Result<int> ConvertToArabicNumeral(this string? romanNumeral)
         {
             // Check null or empty
-            if (String.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(romanNumeral))
             {
-                return Result<int>.Failure($"Invalid input: {input}");
+                return Result<int>.Failure($"Invalid input: {romanNumeral}");
             }
 
-            input = input.Trim().ToUpper();
+            romanNumeral = romanNumeral.Trim().ToUpper();
 
             // Check repetition validity
-            var checkRepetitionValidity = CheckRepetitionValidity(input);
+            var checkRepetitionValidity = CheckRepetitionValidity(romanNumeral);
 
             if (!checkRepetitionValidity.Status)
             {
-                return Result<int>.Failure($"{checkRepetitionValidity.Error}: {input}");
+                return Result<int>.Failure($"{checkRepetitionValidity.Error}: {romanNumeral}");
             }
 
             // Get numbers from the numeral
-            var getNumbersList = GetNumbersFromNumeral(input);
+            var getNumbersList = GetNumbersFromNumeral(romanNumeral);
 
             List<int>? numbers;
 
@@ -31,7 +31,7 @@
             }
             else
             {
-                return Result<int>.Failure($"{getNumbersList.Error}: {input}");
+                return Result<int>.Failure($"{getNumbersList.Error}: {romanNumeral}");
             }
 
             // Check subtraction validity
@@ -39,7 +39,7 @@
 
             if (!checkSubtractionValidity.Status)
             {
-                return Result<int>.Failure($"{checkSubtractionValidity.Error}: {input}");
+                return Result<int>.Failure($"{checkSubtractionValidity.Error}: {romanNumeral}");
             }
 
             // Get the total
@@ -47,7 +47,7 @@
 
             if (!getTotal.Status)
             {
-                return Result<int>.Failure($"{getTotal.Error}: {input}");
+                return Result<int>.Failure($"{getTotal.Error}: {romanNumeral}");
             }
 
             return Result<int>.Success(getTotal.Data);
@@ -63,12 +63,12 @@
                         {'M', 1000},
                     };
 
-        private static Result<bool> CheckRepetitionValidity(string romanNumber)
+        private static Result<bool> CheckRepetitionValidity(string romanNumeral)
         {
             // Check repetition validity
             string[] invalidRepetitions = ["IIII", "XXXX", "CCCC", "MMMM", "VV", "LL", "DD"];
 
-            if (invalidRepetitions.Any(romanNumber.Contains))
+            if (invalidRepetitions.Any(romanNumeral.Contains))
             {
                 return Result<bool>.Failure("Invalid repetitions found");
             }
@@ -87,9 +87,9 @@
             for (int i = 0; i < numbers.Count - 1; i++)
             {
                 if (numbers[i] < numbers[i + 1] && // Potential subtraction
-                    !((numbers[i] == 1 && (numbers[i + 1] == 5 || numbers[i + 1] == 10)) ||
-                      (numbers[i] == 10 && (numbers[i + 1] == 50 || numbers[i + 1] == 100)) ||
-                      (numbers[i] == 100 && (numbers[i + 1] == 500 || numbers[i + 1] == 1000))))
+                    !(numbers[i] == 1 && (numbers[i + 1] == 5 || numbers[i + 1] == 10) ||
+                      numbers[i] == 10 && (numbers[i + 1] == 50 || numbers[i + 1] == 100) ||
+                      numbers[i] == 100 && (numbers[i + 1] == 500 || numbers[i + 1] == 1000)))
                 {
                     return Result<bool>.Failure("Invalid subtractions found");
                 }
@@ -97,12 +97,12 @@
             return Result<bool>.Success(true);
         }
 
-        private static Result<List<int>> GetNumbersFromNumeral(string input)
+        private static Result<List<int>> GetNumbersFromNumeral(string romanNumeral)
         {
             // Extract numbers from the numeral
             var numbers = new List<int>();
 
-            foreach (var character in input)
+            foreach (var character in romanNumeral)
             {
                 if (RomanToArabicDictionary.TryGetValue(character, out int value))
                 {

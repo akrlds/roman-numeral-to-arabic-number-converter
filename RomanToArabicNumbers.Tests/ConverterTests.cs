@@ -1,6 +1,8 @@
+using RomanToArabicNumeralConverter.Common;
+
 namespace RomanToArabicNumeralConverter.Tests
 {
-    public class RomanToArabicNumeralConverterTests
+    public class ConverterTests
     {
         // Valid input data and results
         [Theory]
@@ -45,9 +47,9 @@ namespace RomanToArabicNumeralConverter.Tests
         [InlineData("MMXXV", 2025)]
         [InlineData("MMM", 3000)]
         [InlineData("MMMCMXCIX", 3999)]
-        public void Convert_ValidRomanNumeral_ReturnsCorrectValue(string roman, int expected)
+        public void Convert_ValidRomanNumeral_ReturnsCorrectValue(string input, int expected)
         {
-            var result = RomanToArabicNumeralConverter.Convert(roman);
+            var result = input.ConvertToArabicNumeral();
             Assert.True(result.Status);
             Assert.Equal(expected, result.Data);
         }
@@ -63,9 +65,9 @@ namespace RomanToArabicNumeralConverter.Tests
         [InlineData("XD")]
         [InlineData("VX")]
         [InlineData("ABC")]
-        public void Convert_InvalidRomanNumeral_ReturnsError(string roman)
+        public void Convert_InvalidRomanNumeral_ReturnsError(string input)
         {
-            var result = RomanToArabicNumeralConverter.Convert(roman);
+            var result = input.ConvertToArabicNumeral();
             Assert.False(result.Status);
         }
     }

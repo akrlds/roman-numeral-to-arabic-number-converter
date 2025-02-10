@@ -1,4 +1,6 @@
-﻿namespace RomanToArabicNumeralConverter
+﻿using RomanToArabicNumeralConverter.Common;
+
+namespace RomanToArabicNumeralConverter
 {
     internal static class Program
     {
@@ -19,7 +21,7 @@
                 }
 
                 // Convert
-                var result = RomanToArabicNumeralConverter.Convert(input);
+                var result = input.ConvertToArabicNumeral();
 
                 if (!result.Status)
                 {
